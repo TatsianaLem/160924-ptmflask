@@ -52,21 +52,21 @@ def get_users_by_rating(session: Session, req_rating: float) -> list[User]:
 
 
 with DBConnection(engine) as session:
-    # data = {
-    #     "first_name": "John",
-    #     "last_name": "Green",
-    #     "email": "john.green@gmail.com",
-    #     "password": "s8fDg9sd$r8sd$76ftaS%dfg0sD78fg^s68Sd7547As6978",
-    #     "phone": "+995 557 873 424",
-    #     "role_id": 3
-    # }
-    #
-    # try:
-    #     user = create_user(session=session, data=data)
-    #     print("User created successfully.")
-    #     print(user)
-    # except Exception as err:
-    #     print(err)
+    data = {
+        "first_name": "John",
+        "last_name": "Green",
+        "email": "john.green@gmail.com",
+        "password": "s8fDg9sd$r8sd$76ftaS%dfg0sD78fg^s68Sd7547As6978",
+        "phone": "+995 557 873 424",
+        "role_id": 3
+    }
+
+    try:
+        user = create_user(session=session, data=data)
+        print("User created successfully.")
+        print(user)
+    except Exception as err:
+        print(err)
 
     # ==================================================================
     #
