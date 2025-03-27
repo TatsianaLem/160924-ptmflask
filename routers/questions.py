@@ -1,4 +1,6 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify, Response
+
+from controllers.questions import get_all_questions, create_new_question
 
 questions_bp = Blueprint(name="questions", import_name=__name__)
 
@@ -27,13 +29,35 @@ questions_bp = Blueprint(name="questions", import_name=__name__)
 
 
 @questions_bp.route('', methods=["GET", "POST"])
-def questions_list():
+def questions_list() -> Response | tuple[Response, int]:
     if request.method == "GET":
-        return "ALL QUESTIONS"
+        questions = get_all_questions()
+
+        return jsonify(questions)
+
 
     if request.method == "POST":
-        return "CREATE QUESTION"
+        data = request.json
 
+        if not data or "text" not in data:
+            return jsonify(
+                {
+                    "error": "No required field provided. ('text')"
+                }
+            ), 400
+
+        new_question = create_new_question(raw_data=data)
+
+        return jsonify(
+            {
+                "message": "New question was added.",
+                "id": new_question.id
+            }
+        ), 201  # CREATED
+
+# request.args => { "agree_count": True}
+# http://127.0.0.1:5000/ questions/?agree_count=true
+# Questions.query.order_by(desc(agree_count))
 
 @questions_bp.route('/<int:id>', methods=["GET", "PUT", "DELETE"])
 def retrieve_question(id: int):

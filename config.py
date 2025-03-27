@@ -15,6 +15,7 @@ class Config:
     SQLALCHEMY_DATABASE_URI: str = os.getenv("SQLALCHEMY_DATABASE_URI")
 
 
+
 class DevelopmentConfig(Config):
     DEBUG: bool = True
 
