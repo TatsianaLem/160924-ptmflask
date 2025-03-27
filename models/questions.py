@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Mapped, mapped_column
 
 from models import db
+from models.answers import Answer
 
 
 class Question(db.Model):
@@ -15,8 +16,14 @@ class Question(db.Model):
     text: Mapped[str] = mapped_column(
         db.String(255),
     )
+    category_id: Mapped[int] = mapped_column(
+        db.Integer,
+        db.ForeignKey('categories.id'),
+        nullable=False
+    )
 
     answers: Mapped[list['Answer']] = db.relationship('Answer', back_populates='question')
+    category: Mapped['Category'] = db.relationship('Category', back_populates='questions')
 
     def __repr__(self):
         return f'Question: {self.text}'
@@ -44,3 +51,19 @@ class Statistic(db.Model):
             self.agree_count,
             self.disagree_count
         )
+
+class Category(db.Model):
+    __tablename__ = 'categories'
+
+    id: Mapped[int] = mapped_column(
+        db.Integer,
+        primary_key=True,
+        autoincrement=True
+    )
+    name: Mapped[str] = mapped_column(
+        db.String(100),
+        nullable=False
+    )
+    questions: Mapped[list['Question']] = db.relationship('Question', back_populates='category')
+    def __repr__(self):
+        return f'<Category {self.name}>'
