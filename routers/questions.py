@@ -1,6 +1,9 @@
 from flask import Blueprint, request, jsonify, Response
 
-from controllers.questions import get_all_questions, create_new_question
+from controllers.questions import (
+    get_all_questions,
+    create_new_question
+)
 
 questions_bp = Blueprint(name="questions", import_name=__name__)
 
@@ -12,6 +15,7 @@ questions_bp = Blueprint(name="questions", import_name=__name__)
 # @questions_bp.route('', methods=["POST"])
 # def create_question():
 #     return "CREATE QUESTION"
+#
 #
 # @questions_bp.route('/<int:id>', methods=["GET"])
 # def get_question_by_id(id: int):
@@ -28,13 +32,13 @@ questions_bp = Blueprint(name="questions", import_name=__name__)
 #     return f"QUESTION DELETE BY ID - {id}"
 
 
+
 @questions_bp.route('', methods=["GET", "POST"])
 def questions_list() -> Response | tuple[Response, int]:
     if request.method == "GET":
         questions = get_all_questions()
 
         return jsonify(questions)
-
 
     if request.method == "POST":
         data = request.json
@@ -55,9 +59,9 @@ def questions_list() -> Response | tuple[Response, int]:
             }
         ), 201  # CREATED
 
-# request.args => { "agree_count": True}
-# http://127.0.0.1:5000/ questions/?agree_count=true
-# Questions.query.order_by(desc(agree_count))
+# request.args => { "agree_count": True }
+# http://127.0.0.1:5000/questions/?agree_count=ture
+# Questions.query.order_by(desc(agree_count)).all()
 
 @questions_bp.route('/<int:id>', methods=["GET", "PUT", "DELETE"])
 def retrieve_question(id: int):
@@ -69,4 +73,3 @@ def retrieve_question(id: int):
 
     if request.method == "DELETE":
         return f"QUESTION DELETE BY ID - {id}"
-

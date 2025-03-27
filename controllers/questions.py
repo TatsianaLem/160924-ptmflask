@@ -16,9 +16,11 @@ def get_all_questions() -> list[dict[str, int | str]]:
 
     return questions_data
 
+
 def create_new_question(raw_data: dict[str, str]) -> Question:
-    new_obj = Question(text=raw_data['text'])
+    new_obj = Question(text=raw_data["text"])
 
     db.session.add(new_obj)
     db.session.commit()
+
     return new_obj
