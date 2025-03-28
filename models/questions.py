@@ -18,11 +18,11 @@ class Question(db.Model):
     category_id: Mapped[int] = mapped_column(
         db.Integer,
         db.ForeignKey('categories.id'),
-        nullable=False
+        nullable=True
     )
 
     answers: Mapped[list['Answer']] = db.relationship('Answer', back_populates='question')
-    categories: Mapped[list['Category']] = db.relationship('Category', back_populates='question')
+    category: Mapped['Category'] = db.relationship('Category', back_populates='questions')
 
     def __repr__(self):
         return f'Question: {self.text}'
