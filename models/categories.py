@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Mapped, mapped_column
-
+from models.questions import Question
 from models import db
 
 
@@ -15,7 +15,7 @@ class Category(db.Model):
         db.String(40)
     )
 
-    questions: Mapped[list['Question']] = db.relationship(
+    questions: Mapped['Question'] = db.relationship(
         'Question',
         back_populates='category'
     )
