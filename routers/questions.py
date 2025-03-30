@@ -65,44 +65,44 @@ def questions_list() -> Response | tuple[Response, int]:
 @questions_bp.route('/<int:id>', methods=["GET", "PUT", "DELETE"])
 def retrieve_question(id: int):
     if request.method == "GET":
-        question = get_question_by_id(id_=id)
-
-        if question:
-            return jsonify(
-                {
-                    "id": question.id,
-                    "text": question.text
-                }
-            ), 200
-        else:
-            return jsonify(
-                {}
-            ), 204
-
-    if request.method == "PUT":
-        question = get_question_by_id(id_=id)
-
+        question = get_question_by_id(id=id)
         if not question:
             return jsonify(
-                {}
-            ), 204
+                {
+                    "error": f"Значение по id - {id} не найдено."
+                }
+            ), 404
+        return jsonify(
+            QuestionResponse(id=question.id,
+                             text=question.text,
+                             category_id=question.category_id
+                             ).model_dump()
+        ), 200
 
-        data = request.get_json()
-
-        if "text" not in data:
+    if request.method == "PUT":
+        question = get_question_by_id(id=id)
+        if not question:
             return jsonify(
                 {
-                    "error": "Question was not provided."
+                    "error": f"Значение по id - {id} не найдено."
+                }
+            ), 404
+
+        data = request.json
+        if not data or "text" not in data:
+            return jsonify(
+                {
+                    "error": "No required field provided. ('text')"
                 }
             ), 400
 
-        updated_obj = update_question(entity=question, row_data=data)
+        updated_question = update_question(question, data)
 
         return jsonify(
-            {
-                "id": updated_obj.id,
-                "text": updated_obj.text
-            }
+            QuestionResponse(id=updated_question.id,
+                             text=updated_question.text,
+                             category_id=updated_question.category_id
+                             ).model_dump()
         ), 200
 
     if request.method == "DELETE":

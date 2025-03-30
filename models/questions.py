@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Mapped, mapped_column
 
 from models import db
+from models.answers import Answer
+from models.categories import Category
 
 
 class Question(db.Model):
